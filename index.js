@@ -104,7 +104,9 @@ app.all("*", (req, res, next) => {
 // error middleware
 app.use(globalErrorHandler);
 
-app.listen(+process.env.PORT, "127.0.0.1", () => {
+const port = process.env.PORT || 3000;
+
+app.listen(port, "127.0.0.1", () => {
   console.log(`App running on port ${process.env.PORT}`);
 });
 
