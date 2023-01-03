@@ -9,7 +9,6 @@ const stripe = require("stripe")(
 );
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) get tour for checkout
-  console.log(req.cookies);
   const { slotId } = req.params;
   const tour = await Tour.findById(req.params.tourId);
   // 2) create checkout session
@@ -17,7 +16,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     payment_method_types: ["card"],
     mode: "payment",
     success_url: `http://127.0.0.1:3000/api/v1/bookings?tour=${req.params.tourId}&user=${req.user.id}&price=${tour.price}&slot=${slotId}`,
-    cancel_url: `http://127.0.0.1:5173/tours/${tour.slug}`,
+    cancel_url: `https://touradventurer.netlify.app/tours/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
     line_items: [
