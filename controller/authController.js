@@ -42,7 +42,7 @@ const signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
 
   // const url = `${req.protocol}://${req.get('host')}/me`;
-  const url = "http://127.0.0.1:5173/me";
+  const url = "https://touradventurer.netlify.app/me";
   console.log(url);
   await new Email(newUser, url).sendWelcome();
   createSendToken(newUser, 201, res);
@@ -154,7 +154,7 @@ const forgetPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
-  const resetURL = `http://127.0.0.1:5173/resetPassword/${resetToken}`;
+  const resetURL = `https://touradventurer.netlify.app/resetPassword/${resetToken}`;
   const message = `Forgot password? click here --> ${resetURL}`;
   try {
     // await sendEmail({
