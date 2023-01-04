@@ -1,35 +1,35 @@
-const express = require('express');
-const userController = require('../controller/userController');
+const express = require("express");
+const userController = require("../controller/userController");
 const authController = require(`../controller/authController`);
-const multer = require('multer');
-const upload = multer({ dest: 'public/img/users' });
+const multer = require("multer");
+const upload = multer({ dest: "public/img/users" });
 
 // router
 const router = express.Router();
-router.route('/signup').post(authController.signup);
-router.route('/login').post(authController.login);
-router.route('/logout').get(authController.logout);
-router.route('/forgetPassword').post(authController.forgetPassword);
-router.route('/resetPassword/:resetToken').patch(authController.resetPassword);
+router.route("/signup").post(authController.signup);
+router.route("/login").post(authController.login);
+router.route("/logout").get(authController.logout);
+router.route("/forgetPassword").post(authController.forgetPassword);
+router.route("/resetPassword/:resetToken").patch(authController.resetPassword);
 
-router.use(authController.protect);
+router.use(authController.protect, authController.restrictTo("user"));
 
-router.route('/me').get(userController.getMe, userController.getUserById);
-router.route('/updatePassword').patch(authController.updatePassword);
+router.route("/me").get(userController.getMe, userController.getUserById);
+router.route("/updatePassword").patch(authController.updatePassword);
 router
-  .route('/updateMe')
+  .route("/updateMe")
   .patch(userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe);
 
 // delete user profile image
-router.route('/deleteProfilePic').patch(userController.deleteProfilePic);
+router.route("/deleteProfilePic").patch(userController.deleteProfilePic);
 
-router.route('/deleteMe').delete(userController.deleteMe);
+router.route("/deleteMe").delete(userController.deleteMe);
 
-router.use(authController.restrictTo('admin'));
+router.use(authController.restrictTo("admin"));
 
-router.route('/').get(userController.getAllUsers);
+router.route("/").get(userController.getAllUsers);
 router
-  .route('/:id')
+  .route("/:id")
   .get(userController.getUserById)
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
