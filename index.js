@@ -26,7 +26,10 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "https://touradventurer.netlify.app",
+    origin:
+      process.env.NODE_ENV === "production"
+        ? "https://touradventurer.netlify.app"
+        : "http://127.0.0.1:5173",
     credentials: true,
   })
 );
