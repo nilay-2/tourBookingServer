@@ -103,7 +103,7 @@ const updateMe = catchAsync(async (req, res, next) => {
   if (req.file) filteredBody.photo = req.file.filename;
   // 3. update the user data
   console.log(filteredBody);
-  const updatedUser = await User.findOneAndUpdate({ _id: req.user.id }, filteredBody, {
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: false,
   });
