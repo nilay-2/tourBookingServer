@@ -25,7 +25,7 @@ router.route("/deleteProfilePic").patch(userController.deleteProfilePic);
 
 router.route("/deleteMe").delete(userController.deleteMe);
 
-router.use(authController.restrictTo("admin"));
+// router.use(authController.restrictTo("admin"));
 
 router.route("/").get(userController.getAllUsers);
 router

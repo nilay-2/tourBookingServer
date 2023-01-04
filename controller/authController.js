@@ -136,15 +136,15 @@ const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-const restrictTo = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return next(new AppError("you do not have permission to perform this action", 403));
-    }
+// const restrictTo = (...roles) => {
+//   return (req, res, next) => {
+//     if (!roles.includes(req.user.role)) {
+//       return next(new AppError("you do not have permission to perform this action", 403));
+//     }
 
-    next();
-  };
-};
+//     next();
+//   };
+// };
 const forgetPassword = catchAsync(async (req, res, next) => {
   const { email } = req.body;
   const user = await User.findOne({ email: email });
@@ -219,7 +219,7 @@ module.exports = {
   getAllUsers,
   login,
   protect,
-  restrictTo,
+  // restrictTo,
   forgetPassword,
   resetPassword,
   updatePassword,
