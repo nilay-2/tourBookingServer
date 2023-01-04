@@ -12,22 +12,22 @@ module.exports = class Email {
   createTransport() {
     // if (process.env.NODE_ENV === 'production') {
     //   // gmail
-    //   return nodemailer.createTransport({
-    //     service: 'gmail',
-    //     auth: {
-    //       user: process.env.EMAIL_GMAIL_USERNAME,
-    //       pass: process.env.EMAIL_GMAIL_PASS,
-    //     },
-    //   });
-    // }
     return nodemailer.createTransport({
-      host: process.env.Email_host,
-      port: process.env.Email_port,
+      service: "gmail",
       auth: {
-        user: process.env.Email_user,
-        pass: process.env.Email_pass,
+        user: process.env.EMAIL_GMAIL_USERNAME,
+        pass: process.env.EMAIL_GMAIL_PASS,
       },
     });
+    // }
+    // return nodemailer.createTransport({
+    //   host: process.env.Email_host,
+    //   port: process.env.Email_port,
+    //   auth: {
+    //     user: process.env.Email_user,
+    //     pass: process.env.Email_pass,
+    //   },
+    // });
   }
 
   async send(template, subject) {
