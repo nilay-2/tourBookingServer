@@ -20,7 +20,7 @@ router.route("/updateMe").patch(userController.updateMe);
 // .patch(userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe);
 
 // delete user profile image
-// router.route("/deleteProfilePic").patch(userController.deleteProfilePic);
+router.route("/deleteProfilePic").patch(userController.deleteProfilePic);
 
 router.route("/deleteMe").delete(userController.deleteMe);
 

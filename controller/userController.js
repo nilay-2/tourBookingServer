@@ -100,7 +100,7 @@ const updateMe = catchAsync(async (req, res, next) => {
 
   // 2. Filter out object
   const filteredBody = filterReqBody(req.body, "name", "email");
-  if (req.file) filteredBody.photo = req.file.filename;
+  if (req.body.photo) filteredBody.photo = req.body.photo;
   // 3. update the user data
   console.log(filteredBody);
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
@@ -138,6 +138,17 @@ const updateMe = catchAsync(async (req, res, next) => {
 //   });
 // });
 
+const deleteProfilePic = catchAsync(async (req, res, next) => {
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body, {
+    new: true,
+    runValidators: false,
+  });
+  res.status(200).json({
+    status: "success",
+    updatedUser,
+  });
+});
+
 const deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
@@ -159,5 +170,5 @@ module.exports = {
   getMe,
   // uploadUserPhoto,
   // resizeUserPhoto,
-  // deleteProfilePic,
+  deleteProfilePic,
 };
