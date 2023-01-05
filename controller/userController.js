@@ -4,8 +4,8 @@ const catchAsync = require("../utils/catchAsync");
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const factory = require("../controller/handlerFactory");
-const multer = require("multer");
-const sharp = require("sharp");
+// const multer = require("multer");
+// const sharp = require("sharp");
 // const upload = multer({ dest: 'public/img/users' });
 
 // const multerStorage = multer.diskStorage({
@@ -18,33 +18,33 @@ const sharp = require("sharp");
 //   },
 // });
 
-const multerStorage = multer.memoryStorage();
+// const multerStorage = multer.memoryStorage();
 
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image")) {
-    cb(null, true);
-  } else {
-    cb(new AppError("Not an image! Please upload images.", 400), false);
-  }
-};
+// const multerFilter = (req, file, cb) => {
+//   if (file.mimetype.startsWith("image")) {
+//     cb(null, true);
+//   } else {
+//     cb(new AppError("Not an image! Please upload images.", 400), false);
+//   }
+// };
 
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter,
-});
+// const upload = multer({
+//   storage: multerStorage,
+//   fileFilter: multerFilter,
+// });
 
-const uploadUserPhoto = upload.single("photo");
+// const uploadUserPhoto = upload.single("photo");
 
-const resizeUserPhoto = async (req, res, next) => {
-  if (!req.file) return next();
-  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
-  await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat("jpeg")
-    .jpeg({ quality: 90 })
-    .toFile(`public/img/users/${req.file.filename}`);
-  next();
-};
+// const resizeUserPhoto = async (req, res, next) => {
+//   if (!req.file) return next();
+//   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+//   await sharp(req.file.buffer)
+//     .resize(500, 500)
+//     .toFormat("jpeg")
+//     .jpeg({ quality: 90 })
+//     .toFile(`public/img/users/${req.file.filename}`);
+//   next();
+// };
 
 const filterReqBody = (obj, ...allowedFields) => {
   const newObj = {};
@@ -85,18 +85,18 @@ const updateMe = catchAsync(async (req, res, next) => {
   }
 
   console.log(req.body);
-  if (req.body.fileDelete !== "default.jpg") {
-    // const path1 = path.relative(__dirname, `starter/public/img/users/${req.body.fileDelete}`);
-    // console.log(path1);
-    fs.unlink(`./public/img/users/${req.body.fileDelete}`, (err) => {
-      if (err) {
-        console.log(err);
-        return;
-      } else {
-        console.log("file deleted successfully");
-      }
-    });
-  }
+  // if (req.body.fileDelete !== "default.jpg") {
+  //   // const path1 = path.relative(__dirname, `starter/public/img/users/${req.body.fileDelete}`);
+  //   // console.log(path1);
+  //   fs.unlink(`./public/img/users/${req.body.fileDelete}`, (err) => {
+  //     if (err) {
+  //       console.log(err);
+  //       return;
+  //     } else {
+  //       console.log("file deleted successfully");
+  //     }
+  //   });
+  // }
 
   // 2. Filter out object
   const filteredBody = filterReqBody(req.body, "name", "email");
@@ -113,30 +113,30 @@ const updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-const deleteProfilePic = catchAsync(async (req, res, next) => {
-  if (req.body.fileDelete) {
-    fs.unlink(`./public/img/users/${req.body.fileDelete}`, (err) => {
-      if (err) {
-        console.log(err);
-        return;
-      } else {
-        console.log("file deleted successfully");
-      }
-    });
-  }
-  const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body, {
-    new: true,
-    runValidators: false,
-  });
+// const deleteProfilePic = catchAsync(async (req, res, next) => {
+//   if (req.body.fileDelete) {
+//     fs.unlink(`./public/img/users/${req.body.fileDelete}`, (err) => {
+//       if (err) {
+//         console.log(err);
+//         return;
+//       } else {
+//         console.log("file deleted successfully");
+//       }
+//     });
+//   }
+//   const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body, {
+//     new: true,
+//     runValidators: false,
+//   });
 
-  if (!updatedUser) return next(new AppError("No user found with this id", 404));
+//   if (!updatedUser) return next(new AppError("No user found with this id", 404));
 
-  res.status(200).json({
-    status: "success",
-    message: "Profile image successfully deleted.",
-    updatedUser,
-  });
-});
+//   res.status(200).json({
+//     status: "success",
+//     message: "Profile image successfully deleted.",
+//     updatedUser,
+//   });
+// });
 
 const deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
@@ -157,7 +157,7 @@ module.exports = {
   deleteUser,
   updateUser,
   getMe,
-  uploadUserPhoto,
-  resizeUserPhoto,
-  deleteProfilePic,
+  // uploadUserPhoto,
+  // resizeUserPhoto,
+  // deleteProfilePic,
 };
