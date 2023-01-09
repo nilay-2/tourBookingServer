@@ -281,6 +281,11 @@ const getTourBasedOnQuery = catchAsync(async (req, res, next) => {
   const tourList = await Tour.find({
     "startLocation.description": { $regex: regex, $options: "i" },
   });
+
+  if (tourList.length === 0) {
+    return next(new AppError("No Results found!", 404));
+  }
+
   res.status(200).json({
     status: "success",
     tourList,
