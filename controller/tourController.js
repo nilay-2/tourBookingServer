@@ -278,7 +278,7 @@ const getTour = catchAsync(async (req, res, next) => {
 const getTourBasedOnQuery = catchAsync(async (req, res, next) => {
   let { tour } = req.query;
   tour = tour + " ";
-  const regex = new RegExp(tour.trim());
+  const regex = new RegExp(tour.trimStart());
   const tourList = await Tour.find({
     "startLocation.description": { $regex: regex, $options: "i" },
   });
