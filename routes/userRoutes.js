@@ -22,6 +22,9 @@ router.route("/updateMe").patch(userController.updateMe);
 // delete user profile image
 router.route("/deleteProfilePic").patch(userController.deleteProfilePic);
 
+// upload user profile image
+router.route("/uploadProfileImage").patch(userController.fileParser, userController.resizeImage);
+
 router.route("/deleteMe").delete(userController.deleteMe);
 
 // router.use(authController.restrictTo("admin"));

@@ -4,8 +4,8 @@ const catchAsync = require("../utils/catchAsync");
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const factory = require("../controller/handlerFactory");
-// const multer = require("multer");
-// const sharp = require("sharp");
+const multer = require("multer");
+const sharp = require("sharp");
 // const upload = multer({ dest: 'public/img/users' });
 
 // const multerStorage = multer.diskStorage({
@@ -18,7 +18,7 @@ const factory = require("../controller/handlerFactory");
 //   },
 // });
 
-// const multerStorage = multer.memoryStorage();
+const multerStorage = multer.memoryStorage();
 
 // const multerFilter = (req, file, cb) => {
 //   if (file.mimetype.startsWith("image")) {
@@ -28,12 +28,37 @@ const factory = require("../controller/handlerFactory");
 //   }
 // };
 
-// const upload = multer({
-//   storage: multerStorage,
-//   fileFilter: multerFilter,
-// });
+const upload = multer({
+  storage: multerStorage,
+  // fileFilter: multerFilter,
+});
 
-// const uploadUserPhoto = upload.single("photo");
+const fileParser = upload.single("photo");
+
+const resizeImage = catchAsync(async (req, res, next) => {
+  const fileName = `user-${req.user.id}-${Date.now()}.jpeg`;
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    { photo: fileName },
+    {
+      new: true,
+      runValidators: false,
+    }
+  );
+  sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toBuffer()
+    .then((data) => {
+      const base64data = data.toString("base64");
+      res.status(200).json({
+        status: "success",
+        bufferData: { fileName, b64data: base64data, contentType: "image/jpeg" },
+        updatedUser,
+      });
+    });
+});
 
 // const resizeUserPhoto = async (req, res, next) => {
 //   if (!req.file) return next();
@@ -168,7 +193,7 @@ module.exports = {
   deleteUser,
   updateUser,
   getMe,
-  // uploadUserPhoto,
-  // resizeUserPhoto,
+  fileParser,
+  resizeImage,
   deleteProfilePic,
 };
