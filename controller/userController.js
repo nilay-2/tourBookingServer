@@ -44,7 +44,7 @@ const resizeImage = catchAsync(async (req, res, next) => {
       new: true,
       runValidators: false,
     }
-  );
+  ).select({ name: 1, email: 1, photo: 1, role: 1 });
   sharp(req.file.buffer)
     .resize(500, 500)
     .toFormat("jpeg")
@@ -131,7 +131,7 @@ const updateMe = catchAsync(async (req, res, next) => {
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: false,
-  });
+  }).select({ name: 1, email: 1, photo: 1, role: 1 });
   res.status(200).json({
     status: "success",
     updatedUser,
