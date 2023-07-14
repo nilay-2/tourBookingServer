@@ -42,6 +42,7 @@ const signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
 
   // const url = `${req.protocol}://${req.get('host')}/me`;
+  console.log(process.env.NODE_ENV);
   const FRONTEND_URL =
     process.env.NODE_ENV === "production"
       ? "https://touradventurer.netlify.app"

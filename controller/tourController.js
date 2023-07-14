@@ -59,6 +59,7 @@ const resizeTourImages = async (req, res, next) => {
 };
 
 const getAllTours = factory.getAll(Tour);
+console.log(getAllTours);
 // catchAsync(async (req, res, next) => {
 //   const features = new ApiFeatures(Tour.find(), req.query).filter().sort().limitFields().paginate();
 //   const tours = await features.query;

@@ -70,7 +70,7 @@ const getAll = (Model) => {
     //   .limitFields()
     //   .paginate();
     // const doc = await features.query;
-    const doc = await Model.find({}).select({
+    /* {
       name: 1,
       slug: 1,
       guides: 0,
@@ -85,7 +85,9 @@ const getAll = (Model) => {
       price: 1,
       ratingsAverage: 1,
       ratingsQuantity: 1,
-    });
+    } */
+    // "-__v -guides"
+    const doc = await Model.find({}).select("-__v -guides -images -secretTour -createdAt");
     // .limit(9);
     // const doc = await features.query.explain();
     console.log("new doc: ", doc);
