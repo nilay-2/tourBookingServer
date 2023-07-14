@@ -90,7 +90,7 @@ mongoose
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "https://touradventurer.netlify.app");
   // console.log(req.cookies);
   next();
 });
