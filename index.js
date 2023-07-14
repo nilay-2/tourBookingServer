@@ -77,13 +77,6 @@ if (process.env.NODE_ENV === "development") {
 
 // app.use('/api', limiter);
 
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  // console.log(req.cookies);
-  next();
-});
-
 const DB = process.env.DATABASE.replace("<password>", process.env.DATABASE_PASSWORD);
 // connecting to database
 mongoose
@@ -94,6 +87,13 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log("Database connected successfully"));
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  // console.log(req.cookies);
+  next();
+});
 
 app.use("/", viewRouter);
 app.use("/api/v1/tours", tourRouter);
