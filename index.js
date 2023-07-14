@@ -79,6 +79,7 @@ if (process.env.NODE_ENV === "development") {
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  res.header("Access-Control-Allow-Origin", "*");
   // console.log(req.cookies);
   next();
 });
