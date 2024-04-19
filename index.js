@@ -89,9 +89,19 @@ mongoose
   .then(() => console.log("Database connected successfully"));
 
 app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  res.setHeader("Access-Control-Allow-Origin", "https://touradventurer.netlify.app");
-  // console.log(req.cookies);
+  // console.log(req.headers);
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    env === "production" ? "https://touradventurer.netlify.app" : "http://127.0.0.1:5173"
+  );
+  // another common pattern
+  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
   next();
 });
 
