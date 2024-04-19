@@ -6,6 +6,8 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const bcrypt = require("bcryptjs");
 const Email = require("../utils/email");
+const dotenv = require("dotenv");
+dotenv.config();
 // const correctPassword = async function (candidatePassword, userPassword) {
 //   return await bcrypt.compare(candidatePassword, userPassword);
 // };

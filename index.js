@@ -19,7 +19,7 @@ const viewRouter = require("./routes/viewRoutes");
 const compression = require("compression");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-dotenv.config({ path: "./config.env" });
+dotenv.config();
 
 const app = express();
 
@@ -93,7 +93,9 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader(
     "Access-Control-Allow-Origin",
-    env === "production" ? "https://touradventurer.netlify.app" : "http://127.0.0.1:5173"
+    process.env.NODE_ENV === "production"
+      ? "https://touradventurer.netlify.app"
+      : "http://127.0.0.1:5173"
   );
   // another common pattern
   // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
@@ -104,7 +106,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-
 app.use("/", viewRouter);
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
@@ -112,9 +113,6 @@ app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/bookings", bookingRouter);
 
 app.all("*", (req, res, next) => {
-  // const err = new Error(`Cannot find ${req.originalUrl} on this server`);
-  // err.statusCode = 404;
-  // err.status = 'fail';
   next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404));
 });
 
@@ -124,5 +122,6 @@ app.use(globalErrorHandler);
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
+  console.log("Environment: ", process.env.NODE_ENV);
   console.log(`App running on port ${port}`);
 });

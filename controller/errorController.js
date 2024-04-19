@@ -1,5 +1,6 @@
 const AppError = require("./../utils/appError");
-
+const dotenv = require("dotenv");
+dotenv.config();
 const handleCastErrorDB = (err) => {
   // const message = `Invalid ${err.path} hello: ${err.value}`;
   const message = err;
@@ -43,7 +44,7 @@ const sendErrorProd = (err, res) => {
     console.log("Error 💥", err);
     res.status(500).json({
       status: "error",
-      message: "Something went very wrong",
+      message: err,
     });
   }
 };
