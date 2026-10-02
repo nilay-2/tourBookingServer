@@ -1,6 +1,8 @@
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const ApiFeatures = require("../utils/apiFeatures");
+const { redis } = require("../lib/upstashRedis");
+const { redisKeys } = require("../DataLayer/redisLayer");
 const deleteOne = (Model) => {
   return catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndDelete(req.params.id);
@@ -87,11 +89,23 @@ const getAll = (Model) => {
       ratingsQuantity: 1,
     } */
     // "-__v -guides"
+
+    const toursCachedData = await redis.get(redisKeys.TOURS)
+    if(toursCachedData) {
+      const cachedData = JSON.parse(toursCachedData)
+      return res.status(200).json({
+        status: "success",
+        requestTime: req.requestTime,
+        result: cachedData.length,
+        data: cachedData,
+      });
+    }
     const doc = await Model.find({}).select("-__v -guides -images -secretTour -createdAt");
     // .limit(9);
     // const doc = await features.query.explain();
-    console.log("new doc: ", doc);
-    res.status(200).json({
+    // console.log("new doc: ", doc);
+    redis.set(redisKeys.TOURS, JSON.stringify(doc), {ex: redisKeys.expirationSeconds})
+    return res.status(200).json({
       status: "success",
       requestTime: req.requestTime,
       result: doc.length,

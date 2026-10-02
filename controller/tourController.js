@@ -5,6 +5,8 @@ const multer = require("multer");
 const ApiFeatures = require("./../utils/apiFeatures");
 const catchAsync = require("./../utils/catchAsync");
 const factory = require("./handlerFactory");
+const { redis } = require("../lib/upstashRedis");
+const { redisKeys } = require("../DataLayer/redisLayer");
 const getTop5Tours = (req, res, next) => {
   req.query.sort = "price,-ratingsAverage";
   req.query.limit = 5;
@@ -262,6 +264,14 @@ const getDistances = catchAsync(async (req, res, next) => {
 });
 
 const getTour = catchAsync(async (req, res, next) => {
+  const cachedData = await redis.get(`${redisKeys.TOURS}:${req.params.slug}`)
+  if(cachedData) {
+    const tour = JSON.parse(cachedData)
+    return res.status(200).json({
+      status: "success",
+      tour,
+    });
+  }
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: "reviews",
     select: "user rating review",
@@ -270,7 +280,8 @@ const getTour = catchAsync(async (req, res, next) => {
   if (!tour) {
     return next(new AppError("There is no tour with that name", 404));
   }
-  res.status(200).json({
+  redis.set(`${redisKeys.TOURS}:${req.params.slug}`, JSON.stringify(tour), {ex: redisKeys.expirationSeconds})
+  return res.status(200).json({
     status: "success",
     tour,
   });
